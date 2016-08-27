@@ -12,10 +12,10 @@ C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\D
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\MainPage.g.cs
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\XamlTypeInfo.g.cs
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\App.xaml
-C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\App.xbf
-C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\XamlSaveStateFile.xml
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\MainPage.xaml
+C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\App.xbf
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\MainPage.xbf
+C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\XamlSaveStateFile.xml
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\MultiTimer.WindowsPhone.exe
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\MultiTimer.WindowsPhone.pdb
 C:\Users\kvnsm_000\Documents\MultiTimer\MultiTimer\MultiTimer.WindowsPhone\obj\Debug\priconfig.xml

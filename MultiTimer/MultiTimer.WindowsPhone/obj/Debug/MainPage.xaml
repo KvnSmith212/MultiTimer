@@ -8,8 +8,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel x:Name="timer_panel">
+    <StackPanel x:Name="timer_panel" Margin="20,0,0,0">
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="hours" InputScope="Number" PlaceholderText="00" VerticalAlignment="Center"></TextBox>
+            <TextBox x:Name="minutes" Grid.ColumnSpan="2" InputScope="Number" PlaceholderText="00" VerticalAlignment="Center"></TextBox>
+            <TextBox x:Name="seconds" Grid.ColumnSpan="3" InputScope="Number" PlaceholderText="00" VerticalAlignment="Center"></TextBox>
+        </StackPanel>
         <Button x:ConnectionId='1' x:Name="new_timer_button"                               >+ timer</Button>
+        <TextBlock x:Name="time_error" Foreground="#FFFF3232" Visibility="Collapsed">ERROR! Please input a valid timespan.</TextBlock>
     </StackPanel>
 </Page>
 

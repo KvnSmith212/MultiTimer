@@ -9,38 +9,50 @@ namespace MultiTimer
 {
     class Timer
     {
-        private TextBlock timeBlock;
-        private TimeSpan tickTime;
-        private TimeSpan time;
-        private DispatcherTimer dispatchTimer;
+        public String _name { get; set; }
+        private TimeSpan _tickTime;
+        private TimeSpan _time;
+        private DispatcherTimer _dispatchTimer;
 
-        public Timer(TextBlock block, TimeSpan time)
+        public Timer(String name, TimeSpan time)
         {
-            timeBlock = block;
-            this.time = time;
-
-            tickTime = TimeSpan.FromSeconds(1);
-            InitDispatcher(tickTime);
-        }
-
-        public String TimerString()
-        {
-            return time.ToString();
+            _name = name;
+            _time = time;
+            _tickTime = TimeSpan.FromSeconds(1);
+            InitDispatcher(_tickTime);
         }
 
         private void InitDispatcher(TimeSpan span) 
         {
-            dispatchTimer = new DispatcherTimer();
-            dispatchTimer.Tick += tick;
-            dispatchTimer.Interval = span;
-            dispatchTimer.Start();
+            _dispatchTimer = new DispatcherTimer();
+            _dispatchTimer.Tick += Tick;
+            _dispatchTimer.Interval = span;
         }
 
-        void tick(object sender, object e)
+        private void Tick(object sender, object e)
         {
-            Debug.WriteLine("Timer firing off... " + time.ToString());
-            time = time.Subtract(TimeSpan.FromSeconds(1));
-            timeBlock.Text = time.ToString();
+            //todo: will need to change this once I start storing/adding/removing timers
+            _time = _time.Subtract(TimeSpan.FromSeconds(1));
+        }
+
+        public bool IsRunning()
+        {
+            return _dispatchTimer.IsEnabled;
+        }
+
+        public void StartTimer()
+        {
+            _dispatchTimer.Start();
+        }
+
+        public void StopTimer()
+        {
+            _dispatchTimer.Stop();
+        }
+
+        public String ToString()
+        {
+            return _time.ToString();
         }
     }
 }
