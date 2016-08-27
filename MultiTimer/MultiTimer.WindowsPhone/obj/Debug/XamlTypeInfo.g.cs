@@ -529,4 +529,3 @@ namespace MultiTimer.MultiTimer_WindowsPhone_XamlTypeInfo
 }
 
 
-

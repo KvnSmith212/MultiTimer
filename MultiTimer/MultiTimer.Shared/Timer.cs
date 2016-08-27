@@ -11,13 +11,15 @@ namespace MultiTimer
     {
         public String _name { get; set; }
         private TimeSpan _tickTime;
-        private TimeSpan _time;
+        public TimeSpan _time { get; set; }
+        public TimeSpan _origTime { get; set; }
         private DispatcherTimer _dispatchTimer;
 
         public Timer(String name, TimeSpan time)
         {
             _name = name;
             _time = time;
+            _origTime = time;
             _tickTime = TimeSpan.FromSeconds(1);
             InitDispatcher(_tickTime);
         }

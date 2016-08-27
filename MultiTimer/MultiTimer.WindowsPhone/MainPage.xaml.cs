@@ -60,11 +60,22 @@ namespace MultiTimer
         {
             foreach (var timer in _timers)
             {
-                var block = timer_panel.Children.
-                    OfType<TextBlock>().
-                    First(x => x.Name.Equals(timer._name + "_block"));
+                if (timer._time.CompareTo(TimeSpan.Zero) <= 0)
+                {
+                    timer.StopTimer();
+                    timer._time = timer._origTime;
+                }
+
+                var block = FindTimerBlock(timer);
                 block.Text = timer.ToString();
             }
+        }
+
+        private TextBlock FindTimerBlock(Timer timer)
+        {
+            return timer_panel.Children.
+                        OfType<TextBlock>().
+                        First(x => x.Name.Equals(timer._name + "_block"));
         }
 
         #endregion
