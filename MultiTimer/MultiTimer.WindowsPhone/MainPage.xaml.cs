@@ -21,6 +21,7 @@ namespace MultiTimer
         private List<Timer> _timers;
         private List<TextBlock> _timerBlocks;
         private List<Button> _timerButtons;
+        private List<StackPanel> _timerPanels;
         private DispatcherTimer _masterTimer;
 
         #region setup
@@ -36,6 +37,7 @@ namespace MultiTimer
             InitTimers();
             _timerBlocks = new List<TextBlock>();
             _timerButtons = new List<Button>();
+            _timerPanels = new List<StackPanel>();
             InitMasterTimer();
         }
 
@@ -73,9 +75,8 @@ namespace MultiTimer
 
         private TextBlock FindTimerBlock(Timer timer)
         {
-            return timer_panel.Children.
-                        OfType<TextBlock>().
-                        First(x => x.Name.Equals(timer._name + "_block"));
+            var panel = _timerPanels.First(x => ((TextBlock)x.Children.First()).Name.Equals(timer._name + "_block"));
+            return (TextBlock)panel.Children.First();
         }
 
         #endregion
@@ -85,15 +86,19 @@ namespace MultiTimer
         private void new_timer_button_Click(object sender, RoutedEventArgs e)
         {
             var timer = InitSingleTimer();
+            var timerPanel = InitTimerPanel();
             var timeBlock = InitTimeBlock(timer);
-            var startButton = InitStartButton(timer);
+            var toggleButton = InitToggleButton(timer);
+
+            timerPanel.Children.Insert(0, toggleButton);
+            timerPanel.Children.Insert(0, timeBlock);
+            _timerBlocks.Add(timeBlock);
+            _timerButtons.Add(toggleButton);
+
+            _timerPanels.Add(timerPanel);
+            main_panel.Children.Insert(0, timerPanel);
 
             _timers.Add(timer);
-            _timerBlocks.Add(timeBlock);
-            _timerButtons.Add(startButton);
-
-            timer_panel.Children.Insert(0, timeBlock);
-            timer_panel.Children.Insert(0, startButton);
         }
 
         private Timer InitSingleTimer()
@@ -108,38 +113,48 @@ namespace MultiTimer
             return timer;
         }
 
+        private StackPanel InitTimerPanel()
+        {
+            var panel = new StackPanel();
+            panel.Orientation = Orientation.Horizontal;
+
+            return panel;
+        }
+
         private TextBlock InitTimeBlock(Timer timer)
         {
             var timeBlock = new TextBlock();
             timeBlock.Text = timer.ToString();
             timeBlock.Name = timer._name + "_block";
+            timeBlock.VerticalAlignment = VerticalAlignment.Center;
+            timeBlock.Margin = new Thickness(0, 0, 20, 0);
+            timeBlock.FontSize = 20;
 
             return timeBlock;
         }
 
-        private Button InitStartButton(Timer timer)
+        private Button InitToggleButton(Timer timer)
         {
-            var startButton = new Button();
-            startButton.Name = timer._name + "_button";
-            startButton.Click += toggle_button_Handler();
+            var toggleButton = new Button();
+            toggleButton.Name = timer._name + "_button";
+            toggleButton.Click += toggle_button_Handler();
+            toggleButton.Content = "toggle";
 
-            return startButton;
+            return toggleButton;
         }
 
         private TimeSpan GetTimeSpan()
         {
-            var timeSpan = "0:" + hours.Text + ":" + minutes.Text + ":" + seconds.Text;
-            try
-            {
-                Debug.WriteLine("User created timespan: " + timeSpan);
-                return TimeSpan.Parse(timeSpan);
-            }
-            catch (Exception e)
-            {
-                //todo: handle exception more gracefully
-                time_error.Visibility = Visibility.Visible;
-                return TimeSpan.Zero;
-            }
+            var timeSpan = "";
+            if (String.IsNullOrEmpty(hours.Text))
+                hours.Text = "0";
+            if (String.IsNullOrEmpty(minutes.Text))
+                minutes.Text = "0";
+            if (String.IsNullOrEmpty(seconds.Text))
+                seconds.Text = "0";
+            timeSpan = "0:" + hours.Text + ":" + minutes.Text + ":" + seconds.Text;
+
+            return TimeSpan.Parse(timeSpan);
         }
 
         #endregion
