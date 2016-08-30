@@ -19,10 +19,9 @@ namespace MultiTimer
     public sealed partial class MainPage : Page
     {
         private List<Timer> _timers;
-        private List<TextBlock> _timerBlocks;
-        private List<Button> _timerButtons;
         private List<StackPanel> _timerPanels;
         private DispatcherTimer _masterTimer;
+        private int _timerCount;
 
         #region setup
 
@@ -35,10 +34,9 @@ namespace MultiTimer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             InitTimers();
-            _timerBlocks = new List<TextBlock>();
-            _timerButtons = new List<Button>();
             _timerPanels = new List<StackPanel>();
             InitMasterTimer();
+            _timerCount = 0;
         }
 
         private void InitTimers()
@@ -73,10 +71,14 @@ namespace MultiTimer
             }
         }
 
+        private StackPanel FindTimerPanel(Timer timer)
+        {
+            return _timerPanels.First(x => ((TextBlock)x.Children.First()).Name.Equals(timer._name + "_block"));
+        }
+
         private TextBlock FindTimerBlock(Timer timer)
         {
-            var panel = _timerPanels.First(x => ((TextBlock)x.Children.First()).Name.Equals(timer._name + "_block"));
-            return (TextBlock)panel.Children.First();
+            return (TextBlock)FindTimerPanel(timer).Children.First();
         }
 
         #endregion
@@ -89,12 +91,11 @@ namespace MultiTimer
             var timerPanel = InitTimerPanel();
             var timeBlock = InitTimeBlock(timer);
             var toggleButton = InitToggleButton(timer);
+            var removeButton = InitRemoveButton(timer);
 
+            timerPanel.Children.Insert(0, removeButton);
             timerPanel.Children.Insert(0, toggleButton);
             timerPanel.Children.Insert(0, timeBlock);
-            _timerBlocks.Add(timeBlock);
-            _timerButtons.Add(toggleButton);
-
             _timerPanels.Add(timerPanel);
             main_panel.Children.Insert(0, timerPanel);
 
@@ -103,13 +104,10 @@ namespace MultiTimer
 
         private Timer InitSingleTimer()
         {
-            var name = "time_";
-            if (!_timers.Any())
-                name = name + "0";
-            else
-                name = name + _timers.Count;
+            var name = "time_" + _timerCount;
             var timer = new Timer(name, GetTimeSpan());
-            //todo: this will need to be changed once we start saving/adding/removing timers from the list
+
+            _timerCount++;
             return timer;
         }
 
@@ -139,8 +137,19 @@ namespace MultiTimer
             toggleButton.Name = timer._name + "_button";
             toggleButton.Click += toggle_button_Handler();
             toggleButton.Content = "toggle";
+            toggleButton.Margin = new Thickness(0, 0, 20, 0);
 
             return toggleButton;
+        }
+
+        private Button InitRemoveButton(Timer timer)
+        {
+            var removeButton = new Button();
+            removeButton.Name = timer._name + "_remove";
+            removeButton.Click += remove_button_Handler();
+            removeButton.Content = "Remove?";
+
+            return removeButton;
         }
 
         private TimeSpan GetTimeSpan()
@@ -174,12 +183,31 @@ namespace MultiTimer
 
         #endregion
 
+        #region remove_button_Click
+
+        private void remove_button_Click(object sender, RoutedEventArgs e)
+        {
+            var name = ((Button)sender).Name;
+            var timer = _timers.First(x => x._name.Equals(name.Replace("_remove", "")));
+            var panel = FindTimerPanel(timer);
+
+            main_panel.Children.Remove(panel);
+            _timerPanels.Remove(panel);
+            _timers.Remove(timer);
+        }
+
+        #endregion
+
         #region event handlers
         private RoutedEventHandler toggle_button_Handler()
         {
             return new RoutedEventHandler(toggle_button_Click);
         }
 
+        private RoutedEventHandler remove_button_Handler()
+        {
+            return new RoutedEventHandler(remove_button_Click);
+        }
         #endregion
     }
 }
